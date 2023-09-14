@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKER_IMAGE_NAME = 'golang-web:1.0' 
+    }
     stages {
         
         stage('Cleanup Workspace') {
@@ -17,14 +19,9 @@ pipeline {
         }
         
 
-        stage ('Build Application') {
+        stage ('Build and Test Application') {
             steps {
                 sh "go build"
-            }
-        }
-
-        stage ('Test Application') {
-            steps {
                 sh 'go test ./...'
             }
         }
@@ -39,9 +36,14 @@ pipeline {
             }
         }
         
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${env.DOCKER_IMAGE_NAME} ."
+            }
+        }
         stage("Push Image"){
             withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
-                // some block
+                sh "docker push ${env.DOCKER_IMAGE_NAME}"
             }
         }
     }
