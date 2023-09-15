@@ -13,18 +13,31 @@ pipeline {
         
         stage('Clone code') {
             steps {
-                checkout scm
+                // Sao chép mã nguồn từ GitHub
+                script {
+                    git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
+                }
             }
         }
 
+        stage('Build Application') {
+            steps {
+                sh "${GO_PATH}/go build" // Sử dụng biến môi trường GO_PATH để tham chiếu đến lệnh Go
+            }
+        }
+        
+        stage('Test Application') {
+            steps {
+                sh "${GO_PATH}/go test ./..." // Sử dụng biến môi trường GO_PATH để tham chiếu đến lệnh Go
+            }
+        }
         
         stage('SonarQube Analysis') {
-            tools {
-                sonarQube 'SonarQube'
-            }
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'sonar-scanner'
+                script {
+                    withSonarQubeEnv(credentialsId: 'jenkins-sonar-token') {
+                        sh 'sonar-scanner'
+                    }
                 }
             }
         }
