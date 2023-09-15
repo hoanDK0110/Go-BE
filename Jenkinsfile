@@ -19,11 +19,16 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build and Test Application') {
             steps {
-                sh "${GO_PATH}/go build" // Sử dụng biến môi trường GO_PATH để tham chiếu đến lệnh Go
-                sh "${GO_PATH}/go test ./..." // Sử dụng biến môi trường GO_PATH để tham chiếu đến lệnh Go
+                sh "${GO_PATH}/go build" // 
+            }
+        }
+        
+        stage('Test Application') {
+            steps {
+                sh "${GO_PATH}/go test ./..." 
             }
         }
         
