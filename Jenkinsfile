@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        go 'go1.21.1'
+        go 'golang'
     }
     environment {
         DOCKER_IMAGE_NAME = 'golang-web:1.0'
