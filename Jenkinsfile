@@ -35,18 +35,8 @@ pipeline {
                 }
             }
         }
+
         
-        stage('Build Docker Image') {
-            steps {
-                sh "docker build -t ${env.DOCKER_IMAGE_NAME} ."
-            }
-        }
-        stage("Push Image"){
-            withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
-                sh "docker push ${env.DOCKER_IMAGE_NAME}"
-            }
-        }
-    }
 
     post {
         success {
