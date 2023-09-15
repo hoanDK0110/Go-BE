@@ -1,6 +1,10 @@
 pipeline {
     agent any
+    tools {
+        go 'go1.21.1'
+    }
     environment {
+        GO114MODULE = 'on
         DOCKER_IMAGE_NAME = 'golang-web:1.0'
         GO_PATH = "/usr/local/go/bin" // Đường dẫn đầy đủ đến thư mục chứa lệnh Go
     }
@@ -20,17 +24,20 @@ pipeline {
             }
         }
 
-        stage('Build Application') {
+        stage("unit-test") {
             steps {
-                sh "${GO_PATH}/go build" // Sử dụng biến môi trường GO_PATH để tham chiếu đến lệnh Go
+                echo 'UNIT TEST EXECUTION STARTED'
+                sh 'make unit-tests'
+            }
+        }
+
+        stage("functional-test") {
+            steps {
+                echo 'FUNCTIONAL TEST EXECUTION STARTED'
+                sh 'make functional-tests'
             }
         }
         
-        stage('Test Application') {
-            steps {
-                sh "${GO_PATH}/go test ./..." // Sử dụng biến môi trường GO_PATH để tham chiếu đến lệnh Go
-            }
-        }
         
         stage('SonarQube Analysis') {
             steps {
