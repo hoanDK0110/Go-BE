@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-        go 'golang'
-    }
     environment {
         APP_NAME = 'app-pipeline'
         RELEASE = "1.0.0"
@@ -12,6 +9,7 @@ pipeline {
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         DOCKER_IMAGE_NAME = 'golang-web:1.0'
         JENKINS_API_TOKEN = credentials("jenkins-sonar")
+        GO_PATH = "/usr/local/go/bin" // Đường dẫn đầy đủ đến thư mục chứa lệnh Go
     }
     stages {
         stage('Cleanup Workspace') {
