@@ -13,7 +13,10 @@ pipeline {
         
         stage('Clone code') {
             steps {
-                checkout SCM
+                // Sao chép mã nguồn từ GitHub
+                script {
+                    git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
+                }
             }
         }
 
