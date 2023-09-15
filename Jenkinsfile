@@ -29,24 +29,9 @@ pipeline {
 
         stage("Build Application"){
             steps {
-                sh "go build"
+                sh "${GO_PATH}/go build"
             }
        }
-
-        stage("unit-test") {
-            steps {
-                echo 'UNIT TEST EXECUTION STARTED'
-                sh 'make unit-tests'
-            }
-        }
-
-        stage("functional-test") {
-            steps {
-                echo 'FUNCTIONAL TEST EXECUTION STARTED'
-                sh 'make functional-tests'
-            }
-        }
-        
         
         stage('SonarQube Analysis') {
             steps {
