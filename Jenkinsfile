@@ -1,10 +1,9 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = 'golang-web:1.0' 
+        DOCKER_IMAGE_NAME = 'golang-web:1.0'
     }
     stages {
-        
         stage('Cleanup Workspace') {
             steps {
                 cleanWs()
@@ -14,12 +13,13 @@ pipeline {
         stage('Clone code') {
             steps {
                 // Sao chép mã nguồn từ GitHub
-                git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
+                script {
+                    git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
+                }
             }
         }
         
-
-        stage ('Build and Test Application') {
+        stage('Build and Test Application') {
             steps {
                 sh "go build"
                 sh 'go test ./...'
@@ -35,9 +35,8 @@ pipeline {
                 }
             }
         }
-
-        
-
+    }
+    
     post {
         success {
             echo 'Kiểm tra chất lượng mã nguồn thành công!'
@@ -46,5 +45,4 @@ pipeline {
             echo 'Kiểm tra chất lượng mã nguồn thất bại. Hãy kiểm tra lại.'
         }
     }
-    
 }
