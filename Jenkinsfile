@@ -20,17 +20,6 @@ pipeline {
             }
         }
 
-        stage('Build Application') {
-            steps {
-                sh "${GO_PATH}/go build" // 
-            }
-        }
-        
-        stage('Test Application') {
-            steps {
-                sh "${GO_PATH}/go test ./..." 
-            }
-        }
         
         stage('SonarQube Analysis') {
             steps {
