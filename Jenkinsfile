@@ -4,7 +4,6 @@ pipeline {
         go 'go1.21.1'
     }
     environment {
-        GO114MODULE = 'on
         DOCKER_IMAGE_NAME = 'golang-web:1.0'
         GO_PATH = "/usr/local/go/bin" // Đường dẫn đầy đủ đến thư mục chứa lệnh Go
     }
