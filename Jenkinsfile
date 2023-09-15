@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Build and Test Application') {
+        stage('Build Application') {
             steps {
                 sh "${GO_PATH}/go build" // 
             }
