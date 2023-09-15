@@ -31,13 +31,13 @@ pipeline {
             steps {
                 sh "${GO_PATH}/go build"
             }
-       }
+        }
         
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'jenkins-sonar') {
-                        sh 'sonar-scanner'
+                    withSonarQubeEnv(installationName: 'Sonarqube', credentialsId: 'jenkins-sonar') {
+                        sh 'mvn clean package sonar:sonar'
                     }
                 }
             }
