@@ -19,11 +19,12 @@ pipeline {
 
         
         stage('SonarQube Analysis') {
+            tools {
+                sonarQube 'SonarQube'
+            }
             steps {
-                script {
-                    withSonarQubeEnv('sonarqube') {
-                        sh 'mvn sonar:sonar'
-                    }
+                withSonarQubeEnv('sonarqube') {
+                    sh 'sonar-scanner'
                 }
             }
         }
