@@ -4,8 +4,14 @@ pipeline {
         go 'golang'
     }
     environment {
+        APP_NAME = 'app-pipeline'
+        RELEASE = "1.0.0"
+        DOCKER_USER = "hoanDK0110"
+        DOCKER_PASS = 'Dokimhoan2001'
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         DOCKER_IMAGE_NAME = 'golang-web:1.0'
-        GO_PATH = "/usr/local/go/bin" // Đường dẫn đầy đủ đến thư mục chứa lệnh Go
+        JENKINS_API_TOKEN = credentials("jenkins-sonar")
     }
     stages {
         stage('Cleanup Workspace') {
@@ -22,6 +28,12 @@ pipeline {
                 }
             }
         }
+
+        stage("Build Application"){
+            steps {
+                sh "go build"
+            }
+       }
 
         stage("unit-test") {
             steps {
