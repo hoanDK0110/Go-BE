@@ -6,6 +6,7 @@ pipeline {
                 cleanWs()
             }
         }
+        // Clone code from github repo
         stage('Clone code') {
             steps {
                 script {
