@@ -32,7 +32,8 @@ pipeline {
                 sh "${GO_PATH}/go build"
             }
         }
-        
+
+        //Analysis code with Sonarqube
         stage('SonarQube Analysis') {
             steps {
                 script {
