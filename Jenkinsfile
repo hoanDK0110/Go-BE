@@ -6,7 +6,8 @@ pipeline {
                 cleanWs()
             }
         }
-        
+
+        // Clone code SCM
         stage('Clone code') {
             steps {
                 script {
@@ -14,5 +15,15 @@ pipeline {
                 }
             }
         } 
+
+        //Docker registry
+        stage('Clone code') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
+                    sh 'docker build -t hoandk0110/golang-web:v1.0 .'
+                    sh 'docker push hoandk0110/golang-web:v1.0'
+                }
+            }
+        }
     }
 }
