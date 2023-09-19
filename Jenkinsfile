@@ -21,15 +21,20 @@ pipeline {
             steps {
                 script {
                     def dockerImage = 'hoandk0110/golang-web:v1.0'
-
+                    
                     // Đăng nhập vào Docker Hub bằng credentials
                     withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                        def dockerLoginCommand = "docker login -u $DOCKER_USERNAME --password-stdin"
+                        def dockerBuildCommand = "docker build -t $dockerImage ."
+                        def dockerPushCommand = "docker push $dockerImage"
+                        
+                        // Sử dụng 'sh' để thực hiện các lệnh
+                        sh """
+                            ${dockerLoginCommand} <<< '${DOCKER_PASSWORD}'
+                            ${dockerBuildCommand}
+                            ${dockerPushCommand}
+                        """
                     }
-
-                    // Build và push image
-                    sh "docker build -t $dockerImage ."
-                    sh "docker push $dockerImage"
                 }
             }
         }
