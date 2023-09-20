@@ -16,11 +16,19 @@ pipeline {
             }
         }
 
-        // Docker build
+        // Docker registry
         stage('Build and Push code by Docker') {
             steps {
-                withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
-                    sh 'docker build -t hoandk0110/golangweb:v1.0 .'
+                script {
+                    def dockerImage = 'hoandk0110/golang-web:v1.0'
+                    def dockerToken = 'dckr_pat_wlxrClD2X0HDG88jRmVgtunf0nY'
+                    
+                    // Log in to Docker Hub using the access token
+                    sh "docker login -u hoandk0110 -p $dockerToken"
+                    
+                    // Build and push the Docker image
+                    sh "docker build -t $dockerImage ."
+                    sh "docker push $dockerImage"
                 }
             }
         }
