@@ -16,7 +16,7 @@ pipeline {
             }
         }
 
-        // Docker registry
+        // Docker build
         stage('Build and Push code by Docker') {
             steps {
                 withDockerRegistry(credentialsId: 'docker-hub') {
