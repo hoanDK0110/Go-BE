@@ -16,7 +16,14 @@ pipeline {
             }
         }
 
-        // Docker registry
+        
+        stage('Build docker image') {
+            steps {  
+                sh 'docker build -t ylmt/flaskapp:$BUILD_NUMBER .'
+            }
+        }
+
+        /* Docker registry
         stage('Build and Push code by Docker') {
             steps {
                 script {
@@ -32,5 +39,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
