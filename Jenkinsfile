@@ -19,7 +19,7 @@ pipeline {
         // Docker build
         stage('Build and Push code by Docker') {
             steps {
-                withDockerRegistry(credentialsId: 'docker-hub') {
+                withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
                     sh 'docker build -t hoandk0110/golangweb:v1.0 .'
                 }
             }
