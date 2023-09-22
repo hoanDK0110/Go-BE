@@ -13,10 +13,14 @@ pipeline {
             }
         }
 
-        stage ('Sonarqube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv(credentialsId: 'sonar-token') {
-                    sh "sonar-scanner"
+                script {
+                    def scannerHome = tool 'SonarQubeScanner'; // Use the SonarQube Scanner tool configured in Jenkins
+                    def scannerBat = "${scannerHome}/bin/sonar-scanner"
+                    
+                    // Run SonarQube analysis
+                    sh "${scannerBat} -Dsonar.projectKey=golang-web -Dsonar.sources=src"
                 }
             }
         }
