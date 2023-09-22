@@ -1,8 +1,11 @@
 pipeline {
     environment {
-        registry = "hoandk0110/golangweb"  // Your Docker Hub account and repository
+        APP_NAME = "golangweb"
+        RELEASE = "1.0.0"
+        DOCKER_USER = "hoandk0110"
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         registryCredential = 'dockerhub'   // Credential ID for Docker Hub
-        dockerImage = ''
     }
     agent any
     stages {
@@ -31,7 +34,7 @@ pipeline {
                     def dockerfile = './Dockerfile'
 
                     // Build the Docker image and tag it with the version (BUILD_NUMBER)
-                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}", "-f ${dockerfile} .")
+                    docker_image = docker.build("${IMAGE_NAME}", "-f ${dockerfile} .")
                 }
             }
         }
@@ -42,7 +45,8 @@ pipeline {
             script {
                 // Authenticate and push the Docker image to the registry
                 docker.withRegistry('', registryCredential) {
-                    dockerImage.push()
+                    docker_image.push("${IMAGE_TAG}")
+                    docker_image.push('latest')
                 }
             }
         }
