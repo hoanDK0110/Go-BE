@@ -6,7 +6,7 @@ pipeline {
     }
     agent any
     stages {
-        stage('Cloning our Git') {
+        stage('Checkout Code') {
             steps {
                 // Clone your GitHub repository from the 'main' branch
                 git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
@@ -32,27 +32,26 @@ pipeline {
 
                     // Build the Docker image and tag it with the version (BUILD_NUMBER)
                     dockerImage = docker.build("${registry}:${BUILD_NUMBER}", "-f ${dockerfile} .")
-                    }
                 }
             }
         }
-
-        stage('Pushing Docker image') {
-            steps {
-                script {
-                    // Authenticate and push the Docker image to the registry
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push()
-                    }
+    }
+    
+    stage('Pushing Docker image') {
+        steps {
+            script {
+                // Authenticate and push the Docker image to the registry
+                docker.withRegistry('', registryCredential) {
+                    dockerImage.push()
                 }
             }
         }
+    }
 
-        stage('Cleaning up') {
-            steps {
-                // Clean up by removing the locally built Docker image
-                sh "docker rmi ${registry}:${BUILD_NUMBER}"
-            }
+    stage('Cleaning up') {
+        steps {
+            // Clean up by removing the locally built Docker image
+            sh "docker rmi ${registry}:${BUILD_NUMBER}"
         }
     }
 }
