@@ -23,7 +23,7 @@ pipeline {
                         -D sonar.projectVersion=1.0-SNAPSHOT \
                         -D sonar.login=admin \
                         -D sonar.password=1 \
-                        -D sonar.projectBaseDir=/var/lib/jenkins/workspace/jenkins-sonarqube-pipeline/ \
+                        -D sonar.projectBaseDir=/var/lib/jenkins/workspace/test1/ \
                         -D sonar.projectKey=golang-web \
                         -D sonar.sourceEncoding=UTF-8 \
                         -D sonar.language=golang \
