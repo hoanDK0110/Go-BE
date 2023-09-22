@@ -39,24 +39,25 @@ pipeline {
                 }
             }
         }
-    }
     
-    stage('Pushing Docker image') {
-        steps {
-            script {
-                // Authenticate and push the Docker image to the registry
-                docker.withRegistry('', registryCredential) {
-                    docker_image.push()
-                    docker_image.push('latest')
+    
+        stage('Pushing Docker image') {
+            steps {
+                script {
+                    // Authenticate and push the Docker image to the registry
+                    docker.withRegistry('', registryCredential) {
+                        docker_image.push()
+                        docker_image.push('latest')
+                    }
                 }
             }
         }
-    }
 
-    stage('Cleaning up') {
-        steps {
-            // Clean up by removing the locally built Docker image
-            sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+        stage('Cleaning up') {
+            steps {
+                // Clean up by removing the locally built Docker image
+                sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+            }
         }
     }
 }
