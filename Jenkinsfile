@@ -24,6 +24,15 @@ pipeline {
             }
         }
 
+        stage("Quality Gate") {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                }
+            }
+
+        }
+        /*
         stage('Building and Pushing Docker image') {
             steps {
                 script {
@@ -47,5 +56,6 @@ pipeline {
                 sh "docker rmi ${registry}:${BUILD_NUMBER}"
             }
         }
+        */
     }
 }
