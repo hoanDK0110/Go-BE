@@ -6,6 +6,7 @@ pipeline {
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         registryCredential = 'dockerhub'   // Credential ID for Docker Hub
+        docker_image = null  // Định nghĩa biến docker_image ở đây
     }
     agent any
     stages {
@@ -34,7 +35,7 @@ pipeline {
                     def dockerfile = './Dockerfile'
 
                     // Build the Docker image and tag it with the version (BUILD_NUMBER)
-                    docker_image = docker.build("${IMAGE_NAME}", "-f ${dockerfile} .")
+                    docker_image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f ${dockerfile} .")
                 }
             }
         }
@@ -45,19 +46,17 @@ pipeline {
             script {
                 // Authenticate and push the Docker image to the registry
                 docker.withRegistry('', registryCredential) {
-                    docker_image.push("${IMAGE_TAG}")
+                    docker_image.push()
                     docker_image.push('latest')
                 }
             }
         }
     }
 
-    stage ('Cleanup Artifacts') {
+    stage('Cleaning up') {
         steps {
-            script {
-                sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
-                sh "docker rmi ${IMAGE_NAME}:latest"
-            }
+            // Clean up by removing the locally built Docker image
+            sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
         }
     }
 }
