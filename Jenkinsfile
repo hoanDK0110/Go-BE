@@ -19,13 +19,16 @@ pipeline {
                     def scannerHome = tool 'SonarScanner' // Chọn công cụ SonarScanner đã cài đặt trong Jenkins
         
                     withSonarQubeEnv('Sonar-Server') {
+                        // Sử dụng credential 'sonar-token' để xác thực với SonarQube
                         withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                            sh """${scannerHome}/bin/sonar-scanner
-                                -Dsonar.sources=src
-                                -Dsonar.host.url=http://192.168.1.25:9000
-                                -Dsonar.login=$SONAR_TOKEN"""
+                            sh """${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=golang-web \
+                                -Dsonar.sources=src \
+                                -Dsonar.host.url=http://192.168.1.25:9000 \
+                                -Dsonar.login=$SONAR_TOKEN""" // Sử dụng biến SONAR_TOKEN
                         }
                     }
+
                 }
             }
         }
