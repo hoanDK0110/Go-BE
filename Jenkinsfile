@@ -24,15 +24,7 @@ pipeline {
             }
         }
 
-        stage("Quality Gate") {
-            steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-                }
-            }
-        }
-        /*
-        stage('Building and Pushing Docker image') {
+        stage('Building Docker image') {
             steps {
                 script {
                     // Define the Dockerfile location (replace with your actual Dockerfile path)
@@ -40,7 +32,14 @@ pipeline {
 
                     // Build the Docker image and tag it with the version (BUILD_NUMBER)
                     dockerImage = docker.build("${registry}:${BUILD_NUMBER}", "-f ${dockerfile} .")
+                    }
+                }
+            }
+        }
 
+        stage('Pushing Docker image') {
+            steps {
+                script {
                     // Authenticate and push the Docker image to the registry
                     docker.withRegistry('', registryCredential) {
                         dockerImage.push()
@@ -55,6 +54,5 @@ pipeline {
                 sh "docker rmi ${registry}:${BUILD_NUMBER}"
             }
         }
-        */
     }
 }
