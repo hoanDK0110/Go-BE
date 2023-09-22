@@ -14,14 +14,19 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarQubeScanner'; // Use the SonarQube Scanner tool configured in Jenkins
-                    def scannerBat = "${scannerHome}/bin/sonar-scanner"
-                    
-                    // Run SonarQube analysis
-                    sh "${scannerBat} -Dsonar.projectKey=golang-web -Dsonar.sources=src"
-                }
+            def scannerHome = tool 'SonarScanner'
+            withSonarQubeEnv('Sonar-Server') {
+                sh """/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
+                -D sonar.projectVersion=1.0-SNAPSHOT \
+                -D sonar.login=admin \
+                -D sonar.password=1 \
+                -D sonar.projectBaseDir=/var/lib/jenkins/workspace/jenkins-sonarqube-pipeline/ \
+                -D sonar.projectKey=project \
+                -D sonar.sourceEncoding=UTF-8 \
+                -D sonar.language=golang \
+                -D sonar.sources=project/src/main \
+                -D sonar.tests=project/src/test \
+                -D sonar.host.url=http://192.168.1.25:9000/"""
             }
         }
 
