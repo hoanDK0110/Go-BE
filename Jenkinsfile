@@ -18,7 +18,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarScanner' // Chọn công cụ SonarScanner đã cài đặt trong Jenkins
         
-                    withSonarQubeEnv('SonarQubeServer') {
+                    withSonarQubeEnv('Sonar-Server') {
                         // Sử dụng credential 'sonar-token' để xác thực với SonarQube
                         withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                             sh """${scannerHome}/bin/sonar-scanner
