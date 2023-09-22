@@ -21,16 +21,17 @@ pipeline {
                     withSonarQubeEnv('SonarQubeServer') {
                         // Sử dụng credential 'sonar-token' để xác thực với SonarQube
                         withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                            sh """${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.projectKey=golang-web \ // Sử dụng project key của bạn
-                                -Dsonar.sources=src \
-                                -Dsonar.host.url=http://192.168.1.25:9000 \ // Sử dụng địa chỉ của bạn
+                            sh """${scannerHome}/bin/sonar-scanner
+                                -Dsonar.projectKey=golang-web
+                                -Dsonar.sources=src
+                                -Dsonar.host.url=http://192.168.1.25:9000
                                 -Dsonar.login=$SONAR_TOKEN""" // Sử dụng biến SONAR_TOKEN
                         }
                     }
                 }
             }
         }
+
 
 
         stage('Building and Pushing Docker image') {
