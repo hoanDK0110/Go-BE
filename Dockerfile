@@ -1,23 +1,17 @@
-# Sử dụng một hình ảnh golang đã có sẵn làm cơ sở
+# Sử dụng hình ảnh Golang chính thống làm cơ sở
 FROM golang:latest
 
-# Thiết lập thư mục làm việc trong container
+# Đặt thư mục làm thư mục làm việc trong hình ảnh
 WORKDIR /app
 
-# Sao chép mã nguồn ứng dụng vào thư mục /app trong container
+# Sao chép mã nguồn của bạn vào hình ảnh
 COPY . .
 
 # Biên dịch ứng dụng Golang
 RUN go build -o main .
 
-# Sử dụng một hình ảnh nhẹ để triển khai ứng dụng
-FROM alpine:latest
+# Mở cổng 8080
+EXPOSE 80
 
-# Sao chép tệp thực thi từ ứng dụng Golang đã biên dịch vào hình ảnh
-COPY --from=0 /app/main .
-
-# Mở cổng mà ứng dụng lắng nghe (thay thế 8080 bằng cổng của ứng dụng của bạn)
-EXPOSE 8080
-
-# Khởi chạy ứng dụng khi container được khởi động
+# Chạy ứng dụng khi container được khởi chạy
 CMD ["./main"]
