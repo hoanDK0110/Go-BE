@@ -12,6 +12,15 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
             }
         }
+
+        stage ('Sonarqube Analysis') {
+            steps {
+                withSonarQubeEnv(credentialsID: 'sonar-token'){
+                    sh "sonar-scanner"
+                }
+            }
+        }
+
         stage('Building and Pushing Docker image') {
             steps {
                 script {
