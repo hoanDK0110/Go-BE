@@ -16,23 +16,22 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarScanner'
-                    
-                    // Run SonarQube analysis
-                    sh """${scannerHome}/bin/sonar-scanner \
-                        -D sonar.projectVersion=1.0-SNAPSHOT \
-                        -D sonar.login=admin \
-                        -D sonar.password=1 \
-                        -D sonar.projectBaseDir=/var/lib/jenkins/workspace/Go-BE/ \
-                        -D sonar.projectKey=golang-web \
-                        -D sonar.sourceEncoding=UTF-8 \
-                        -D sonar.language=golang \
-                        -D sonar.sources=project/src/main \
-                        -D sonar.tests=project/src/test \
-                        -D sonar.host.url=http://192.168.1.25:9000/"""
+                    def scannerHome = tool 'SonarScanner' // Chọn công cụ SonarScanner đã cài đặt trong Jenkins
+        
+                    withSonarQubeEnv('SonarQubeServer') {
+                        // Sử dụng credential 'sonar-token' để xác thực với SonarQube
+                        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                            sh """${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=golang-web \ // Sử dụng project key của bạn
+                                -Dsonar.sources=src \
+                                -Dsonar.host.url=http://192.168.1.25:9000 \ // Sử dụng địa chỉ của bạn
+                                -Dsonar.login=$SONAR_TOKEN""" // Sử dụng biến SONAR_TOKEN
+                        }
+                    }
                 }
             }
         }
+
 
         stage('Building and Pushing Docker image') {
             steps {
