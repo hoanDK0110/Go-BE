@@ -52,10 +52,12 @@ pipeline {
         }
     }
 
-    stage('Cleaning up') {
+    stage ('Cleanup Artifacts') {
         steps {
-            // Clean up by removing the locally built Docker image
-            sh "docker rmi ${registry}:${BUILD_NUMBER}"
+            script {
+                sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "docker rmi ${IMAGE_NAME}:latest"
+            }
         }
     }
 }
