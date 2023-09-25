@@ -1,4 +1,6 @@
 pipeline {
+    agent any
+    
     environment {
         APP_NAME = "golangweb"
         RELEASE = "1.0.0"
@@ -8,16 +10,16 @@ pipeline {
         registryCredential = 'dockerhub'   // Credential ID for Docker Hub
         docker_image = null  // Định nghĩa biến docker_image ở đây
     }
-    agent any
+    
     stages {
-        stage('Checkout Code') {
+        stage ('Checkout Code') {
             steps {
                 // Clone your GitHub repository from the 'main' branch
                 git branch: 'main', url: 'https://github.com/hoanDK0110/Go-BE.git'
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage ('SonarQube Analysis') {
             steps {
                 script {
                     def scannerHome = tool 'SonarScanner'
